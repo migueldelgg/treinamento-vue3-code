@@ -15,6 +15,7 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "vue/multi-word-component-names": "off", // Desabilita a verificação de nomes de componentes multi-palavra
+    "prettier/prettier": ["error", { endOfLine: "lf" }],
   },
   overrides: [
     {
