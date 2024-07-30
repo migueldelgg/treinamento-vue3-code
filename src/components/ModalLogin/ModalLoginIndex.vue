@@ -1,8 +1,8 @@
 <template>
   <div>
-    <!-- Elemento raiz único adicionado -->
-    <div class="flex justify-between">
+    <div class="flex justify-between" id="modal-login">
       <h1 class="text-4xl font-black text-gray-800">Entre na sua conta</h1>
+
       <button @click="close" class="text-4xl text-gray-600 focus:outline-none">
         &times;
       </button>
@@ -13,15 +13,17 @@
         <label class="block">
           <span class="text-lg font-medium text-gray-800">E-mail</span>
           <input
+            id="email-field"
             v-model="state.email.value"
             type="email"
             :class="{
               'border-brand-danger': !!state.email.errorMessage,
             }"
-            class="block w-full px-4 py-3 mt-1 text-large bg-gray-100 border-2 border-transparent rounded"
-            placeholder="jone.dae@gmail.com"
+            class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 border-transparent rounded"
+            placeholder="jane.dae@gmail.com"
           />
           <span
+            id="email-error"
             v-if="!!state.email.errorMessage"
             class="block font-medium text-brand-danger"
           >
@@ -29,16 +31,17 @@
           </span>
         </label>
 
-        <label class="block mt-4">
+        <label class="block mt-9">
           <span class="text-lg font-medium text-gray-800">Senha</span>
           <input
+            id="password-field"
             v-model="state.password.value"
             type="password"
             :class="{
               'border-brand-danger': !!state.password.errorMessage,
             }"
-            class="block w-full px-4 py-3 mt-1 text-large bg-gray-100 border-2 border-transparent rounded"
-            placeholder=""
+            class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 border-transparent rounded"
+            placeholder="jane.dae@gmail.com"
           />
           <span
             v-if="!!state.password.errorMessage"
@@ -49,32 +52,42 @@
         </label>
 
         <button
+          id="submit-button"
           :disabled="state.isLoading"
           type="submit"
           :class="{
             'opacity-50': state.isLoading,
           }"
-          class="px-8 py-3 mt-10 text-2xl font-bold text-white rounded-full bg-brand-main focus:outline-none transition-all duration-150"
+          class="px-8 py-3 mt-20 text-2xl font-bold text-white rounded-full bg-brand-main focus:outline-none transition-all duration-150"
         >
-          Entrar
+          <icon v-if="state.isLoading" name="loading" class="animate-spin" />
+          <span v-else>Entrar</span>
         </button>
       </form>
     </div>
   </div>
-  <!-- Fim do elemento raiz único -->
 </template>
 
 <script>
 import { reactive } from "vue";
 import { useField } from "vee-validate";
 import useModal from "../../hooks/useModal";
+/* eslint-disable no-unused-vars */
+import { validateEmptyAndLength3 } from "../../utils/validators";
+import { validateEmptyAndEmail } from "../../utils/validators";
+/* eslint-enable no-unused-vars */
 
 export default {
   setup() {
     const modal = useModal();
 
-    const { value: emailValue, errorMessage: emailErrorMessage } =
-      useField("email");
+    const { value: emailValue, errorMessage: emailErrorMessage } = useField(
+      "email",
+      validateEmptyAndEmail
+    );
+
+    const { value: passwordValue, errorMessage: passwordErrorMessage } =
+      useField("password", validateEmptyAndLength3);
 
     const state = reactive({
       hasError: false,
@@ -84,8 +97,8 @@ export default {
         errorMessage: emailErrorMessage,
       },
       password: {
-        value: "",
-        errorMessage: "",
+        value: passwordValue,
+        errorMessage: passwordErrorMessage,
       },
     });
     function handleSubmit() {}
