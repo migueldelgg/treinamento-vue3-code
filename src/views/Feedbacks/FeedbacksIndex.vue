@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Seu conteúdo aqui -->
+    <h1>Feedbacks</h1>
   </div>
 </template>
 
