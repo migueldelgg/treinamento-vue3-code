@@ -74,12 +74,14 @@ import { useField } from "vee-validate";
 import { useToast } from "vue-toastification";
 import useModal from "../../hooks/useModal";
 import services from "../../services";
+import Icon from "../Icon/IconIndex.vue";
 /* eslint-disable no-unused-vars */
 import { validateEmptyAndLength3 } from "../../utils/validators";
 import { validateEmptyAndEmail } from "../../utils/validators";
 /* eslint-enable no-unused-vars */
 
 export default {
+  components: { Icon },
   setup() {
     const router = useRouter();
     const modal = useModal();
