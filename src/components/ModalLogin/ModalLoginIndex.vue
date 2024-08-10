@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-around" id="modal-login">
+    <div class="flex justify-between" id="modal-login">
       <h1 class="text-4xl font-black text-gray-800">Entre na sua conta</h1>
       <button @click="close" class="text-4xl text-gray-600 focus:outline-none">
         &times;
@@ -18,9 +18,10 @@
             :class="{
               'border-brand-danger': !!state.email.errorMessage,
             }"
-            class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 border-transparent rounded"
+            class="block w-full px-4 py-3 mt-1 text-xl bg-gray-100 border-2 border-transparent rounded"
             placeholder="jane.dae@gmail.com"
           />
+
           <span
             id="email-error"
             v-if="!!state.email.errorMessage"
@@ -40,7 +41,7 @@
               'border-brand-danger': !!state.password.errorMessage,
             }"
             class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 border-transparent rounded"
-            placeholder="jane.dae@gmail.com"
+            placeholder="Digite sua senha"
           />
           <span
             v-if="!!state.password.errorMessage"

@@ -35,7 +35,7 @@ const ModalAccountCreate = defineAsyncComponent(() =>
   import("../ModalCreateAccount/ModalCreateAccount.vue")
 );
 
-const DEFAULT_WIDTH = "w3/4 lg:w1/3";
+const DEFAULT_WIDTH = "w-full lg:w-1/3";
 
 export default {
   components: {

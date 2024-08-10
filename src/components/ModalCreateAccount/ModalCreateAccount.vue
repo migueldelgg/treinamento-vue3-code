@@ -56,7 +56,7 @@
             'border-brand-danger': !!state.password.errorMessage,
           }"
           class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 border-transparent rounded"
-          placeholder="jane.dae@gmail.com"
+          placeholder="Digite sua senha"
         />
         <span
           v-if="!!state.password.errorMessage"
@@ -75,7 +75,7 @@
         class="px-8 py-3 mt-10 text-2xl font-bold text-white rounded-full bg-brand-main focus:outline-none transition-all duration-150"
       >
         <icon v-if="state.isLoading" name="loading" class="animate-spin" />
-        <span v-else>Entrar</span>
+        <span v-else>Registrar</span>
       </button>
     </form>
   </div>
@@ -115,7 +115,7 @@ export default {
       useField("password", validateEmptyAndLength3);
 
     const state = reactive({
-      hasError: false,
+      hasErrors: false,
       isLoading: false,
       name: {
         value: nameValue,
@@ -130,38 +130,46 @@ export default {
         errorMessage: passwordErrorMessage,
       },
     });
+
+    async function login({ email, password }) {
+      const { data, errors } = await services.auth.login({ email, password });
+      if (!errors) {
+        window.localStorage.setItem("token", data.token);
+        router.push({ name: "Feedbacks" });
+        modal.close();
+      }
+
+      state.isLoading = false;
+    }
+
     async function handleSubmit() {
       try {
         toast.clear();
         state.isLoading = true;
-        const { data, errors } = await services.auth.login({
+
+        const { errors } = await services.auth.register({
+          name: state.name.value,
           email: state.email.value,
           password: state.password.value,
         });
 
         if (!errors) {
-          window.localStorage.setItem("token", data.token);
-          router.push({ name: "Feedbacks" });
-          state.isLoading = false;
-          modal.close();
+          await login({
+            email: state.email.value,
+            password: state.password.value,
+          });
           return;
         }
 
-        if (errors.status == 404) {
-          toast.error("Email não encontrado!");
-        }
-        if (errors.status == 401) {
-          toast.error("Email/senha inválidos.");
-        }
-        if (errors.status == 400) {
-          toast.error("Ocorreu um erro ao fazer o login.");
+        if (errors.status === 400) {
+          toast.error("Ocorreu um erro ao criar a conta");
         }
 
         state.isLoading = false;
       } catch (error) {
         state.isLoading = false;
-        state.hasError = !!error;
-        toast.error("Ocorreu um erro ao fazer o login.");
+        state.hasErrors = !!error;
+        toast.error("Ocorreu um erro ao criar a conta");
       }
     }
 
